@@ -1,0 +1,84 @@
+<div id="formContainer">
+  <h2>Appointment Form</h2>
+  <form (ngSubmit)="onSave()" #appointmentForm="ngForm" autocomplete="off">
+    <label for="doctor">Doctor:</label>
+    <select [(ngModel)]="appointment.doctor" name="doctor" id="doctor" required>
+      <option value="">Select</option>
+      <option *ngFor="let doc of registeredDoctors" [value]="doc.doctorName">{{ doc.doctorName }} ({{ doc.doctorSpecialization }})</option>
+    </select>
+
+    <label for="patientSearch">Patient:</label>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <input type="text"
+             [(ngModel)]="appointment.patient"
+             name="patientSearch"
+             id="patientSearch"
+             placeholder="Click 🔍 to search and select"
+             autocomplete="off"
+             readonly
+             style="flex:1; background:#f7f7f7; cursor:pointer;" />
+      <button type="button" (click)="openPatientSearchPopup()" style="padding:6px 8px;">
+        <span style="font-size:1.1em;">🔍</span>
+      </button>
+    </div>
+    <input type="hidden" [(ngModel)]="appointment.patient" name="patientName" />
+
+    <!-- Patient Search Popup Modal -->
+    <div class="modal-backdrop" *ngIf="showPatientSearchPopup" (click)="closePatientSearchPopup()"></div>
+    <div class="modal" *ngIf="showPatientSearchPopup">
+      <div class="modal-header">
+        <span>Search Patient</span>
+        <button type="button" class="close-btn" (click)="closePatientSearchPopup()">✖</button>
+      </div>
+      <div class="modal-body">
+        <input type="text"
+               [(ngModel)]="patientSearchTerm"
+               (input)="onPatientSearch()"
+               placeholder="Enter name or contact number"
+               style="width:100%; margin-bottom:10px;" />
+        <div *ngIf="patientSearchResults.length === 0 && patientSearchTerm">
+          <p>No matching patients found.</p>
+        </div>
+        <ul *ngIf="patientSearchResults.length > 0" class="patient-list">
+          <li *ngFor="let p of patientSearchResults" (click)="selectPatient(p)">
+            {{ p.patientName }} ({{ p.patientGender }}, {{ p.patientAge }}) - {{ p.patientContact }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <label for="date">Date:</label>
+    <input type="date" [(ngModel)]="appointment.date" name="date" id="date" required />
+
+    <label for="time">Time:</label>
+    <input type="time" [(ngModel)]="appointment.time" name="time" id="time" required />
+
+    <label for="reason">Reason:</label>
+    <input type="text" [(ngModel)]="appointment.reason" name="reason" id="reason" />
+
+    <button type="submit">Save Appointment</button>
+  </form>
+  <div class="success" *ngIf="successMsg">
+    Appointment Saved Successfully!
+  </div>
+</div>
+
+<div id="savedData" *ngIf="appointments.length > 0">
+  <h3>Appointments (In Memory)</h3>
+  <table>
+    <tr>
+      <th>Doctor</th>
+      <th>Patient</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Reason</th>
+    </tr>
+    <tr *ngFor="let a of appointments">
+      <td>{{ a.doctor }}</td>
+      <td>{{ a.patient }}</td>
+      <td>{{ a.date }}</td>
+      <td>{{ a.time }}</td>
+      <td>{{ a.reason }}</td>
+    </tr>
+  </table>
+</div>

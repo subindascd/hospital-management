@@ -1,0 +1,45 @@
+<div id="formContainer">
+  <h2>Patient Test Results</h2>
+  <form (ngSubmit)="onSearch()" #testForm="ngForm" autocomplete="off">
+    <label for="patientId">Enter Patient ID:</label>
+    <input type="text" [(ngModel)]="searchPatientId" name="patientId" id="patientId" required />
+    <button type="submit">Search</button>
+  </form>
+  <div class="error" *ngIf="notFound">No test records found for this Patient ID.</div>
+  <div *ngIf="foundRecord">
+    <h3>Test Details for {{ foundRecord.patientName }}</h3>
+    <div *ngFor="let test of foundRecord?.tests; let i = index" style="margin-bottom:16px;">
+      <strong>{{ test?.name }}</strong>
+      <div>
+        <label>Result:</label>
+        <input type="text" [(ngModel)]="test.result" [name]="'result'+i" style="width:60%;margin-bottom:6px;" />
+      </div>
+      <div>
+        <label>Upload Report Image:</label>
+        <input type="file" (change)="onImageUpload($event, 'test', i)" accept="image/*" />
+        <div *ngIf="test?.imageUrl && test?.imageUrl !== ''">
+          <img [src]="test.imageUrl" alt="Test Report" style="max-width:180px;max-height:120px;margin-top:6px;" />
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>X-Ray Image:</label>
+      <input type="file" (change)="onImageUpload($event, 'xray')" accept="image/*" />
+      <div *ngIf="foundRecord.xrayImageUrl">
+        <img [src]="foundRecord.xrayImageUrl" alt="X-Ray" style="max-width:180px;max-height:120px;margin-top:6px;" />
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Scan Image:</label>
+      <input type="file" (change)="onImageUpload($event, 'scan')" accept="image/*" />
+      <div *ngIf="foundRecord.scanImageUrl">
+        <img [src]="foundRecord.scanImageUrl" alt="Scan" style="max-width:180px;max-height:120px;margin-top:6px;" />
+      </div>
+    </div>
+  </div>
+  <button *ngIf="foundRecord" (click)="openPrintResult()" style="margin-top:16px;">Print Result</button>
+  <div *ngIf="showPrintResult">
+    <app-print-result [foundRecord]="foundRecord"></app-print-result>
+    <button (click)="closePrintResult()" style="margin-top:8px;">Close</button>
+  </div>
+</div>

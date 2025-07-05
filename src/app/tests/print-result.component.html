@@ -1,0 +1,49 @@
+<div id="printResultContainer" class="styled-form">
+  <h2>Print Test Result</h2>
+  <form *ngIf="foundRecord" (ngSubmit)="onTypeSelect()" #typeForm="ngForm" autocomplete="off">
+    <label for="resultType">Select Result Type:</label>
+    <select [(ngModel)]="selectedType" name="resultType" id="resultType" required>
+      <option value="lab">Lab Test</option>
+      <option value="xray">X-Ray</option>
+      <option value="scan">Scan</option>
+      <option value="other">Other Test</option>
+    </select>
+    <button type="submit" class="primary-btn">Show Result</button>
+  </form>
+  <div *ngIf="showResult" class="result-section">
+    <div *ngIf="selectedType === 'lab'">
+      <h3>Lab Test Results</h3>
+      <table class="styled-table">
+        <tr>
+          <th>Test Name</th>
+          <th>Result</th>
+          <th>Report Image</th>
+        </tr>
+        <tr *ngFor="let test of foundRecord?.tests">
+          <td>{{ test?.name }}</td>
+          <td>{{ test?.result }}</td>
+          <td>
+            <img *ngIf="test?.imageUrl" [src]="test?.imageUrl" alt="Test Report" style="max-width:120px;max-height:80px;" />
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div *ngIf="selectedType === 'xray'">
+      <h3>X-Ray Result</h3>
+      <div *ngIf="foundRecord?.xrayImageUrl">
+        <img [src]="foundRecord?.xrayImageUrl" alt="X-Ray" class="result-image" />
+      </div>
+    </div>
+    <div *ngIf="selectedType === 'scan'">
+      <h3>Scan Result</h3>
+      <div *ngIf="foundRecord?.scanImageUrl">
+        <img [src]="foundRecord?.scanImageUrl" alt="Scan" class="result-image" />
+      </div>
+    </div>
+    <div *ngIf="selectedType === 'other'">
+      <h3>Other Test Result</h3>
+      <div class="other-result-box" *ngIf="foundRecord?.otherTestResult">{{ foundRecord?.otherTestResult }}</div>
+    </div>
+    <button (click)="printResult()" class="primary-btn">Print</button>
+  </div>
+</div>

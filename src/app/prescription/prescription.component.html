@@ -1,0 +1,119 @@
+<div id="formContainer">
+  <h2>Prescription Form</h2>
+  <form (ngSubmit)="onSave()" #prescriptionForm="ngForm" autocomplete="off">
+    <label for="patientId">Patient ID:</label>
+    <input type="text" [(ngModel)]="prescription.patientId" name="patientId" id="patientId" required />
+
+    <label for="patientName">Patient Name:</label>
+    <input type="text" [(ngModel)]="prescription.patientName" name="patientName" id="patientName" required />
+
+    <label for="visitType">Visit Type:</label>
+    <select [(ngModel)]="prescription.visitType" name="visitType" id="visitType" required>
+      <option value="New Visit">New Visit</option>
+      <option value="Revisit">Revisit</option>
+    </select>
+
+    <label for="lastVisitDate">Last Visit Date:</label>
+    <input type="date" [(ngModel)]="prescription.lastVisitDate" name="lastVisitDate" id="lastVisitDate" [required]="prescription.visitType === 'Revisit'" />
+
+    <label for="lastVisitDescription">Last Visit Description:</label>
+    <textarea [(ngModel)]="prescription.lastVisitDescription" name="lastVisitDescription" id="lastVisitDescription" rows="2"></textarea>
+
+
+    <label>Medicine Prescribed:</label>
+    <div *ngFor="let med of prescription.medicines; let i = index" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <input type="checkbox" [(ngModel)]="med.selected" [name]="'selected'+i" />
+      <input type="text" [(ngModel)]="med.name" [name]="'medicine'+i" placeholder="Medicine name" required style="flex:2;min-width:180px;" />
+      <button type="button" (click)="removeMedicine(i)" [disabled]="prescription.medicines.length === 1">🗑️</button>
+    </div>
+    <button type="button" (click)="addMedicine()" style="margin-bottom:12px;">+ Add Medicine</button>
+
+    <label>Lab Tests:</label>
+    <div *ngFor="let test of prescription.labTests; let j = index" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <input type="text" [(ngModel)]="test.name" [name]="'labTest'+j" placeholder="Lab Test name" style="flex:2;min-width:180px;" />
+      <button type="button" (click)="removeLabTest(j)" [disabled]="prescription.labTests.length === 1">🗑️</button>
+    </div>
+    <button type="button" (click)="addLabTest()" style="margin-bottom:12px;">+ Add Lab Test</button>
+
+    <label for="xray">X-Ray:</label>
+    <input type="text" [(ngModel)]="prescription.xray" name="xray" id="xray" placeholder="X-Ray details" />
+
+    <label for="scan">Scan:</label>
+    <input type="text" [(ngModel)]="prescription.scan" name="scan" id="scan" placeholder="Scan details" />
+
+    <label for="otherTest">Other Test:</label>
+    <input type="text" [(ngModel)]="prescription.otherTest" name="otherTest" id="otherTest" placeholder="Other test details" />
+
+    <button type="submit">Save Prescription</button>
+    <button type="button" style="margin-left:12px;" (click)="showTestResults = !showTestResults">Results</button>
+  </form>
+  <div class="success" *ngIf="successMsg">
+    Prescription Saved Successfully!
+  </div>
+
+  <div *ngIf="showTestResults" class="styled-form" style="margin-top:24px;">
+    <h3>Test Results for Prescribed Lab Tests</h3>
+    <table class="styled-table">
+      <tr>
+        <th>Test Name</th>
+        <th>Result</th>
+        <th>Report Image</th>
+      </tr>
+      <tr *ngFor="let test of prescription.labTests">
+        <td>{{ test.name }}</td>
+        <td>{{ test.result || '-' }}</td>
+        <td>
+          <img *ngIf="test.imageUrl" [src]="test.imageUrl" alt="Test Report" style="max-width:120px;max-height:80px;" />
+        </td>
+      </tr>
+    </table>
+    <div *ngIf="prescription.xray">
+      <strong>X-Ray:</strong> {{ prescription.xray }}
+    </div>
+    <div *ngIf="prescription.scan">
+      <strong>Scan:</strong> {{ prescription.scan }}
+    </div>
+    <div *ngIf="prescription.otherTest">
+      <strong>Other Test:</strong> {{ prescription.otherTest }}
+    </div>
+    <button type="button" class="primary-btn" (click)="showTestResults = false" style="margin-top:12px;">Close</button>
+  </div>
+</div>
+
+<div id="savedData" *ngIf="prescriptions.length > 0">
+  <h3>Prescriptions (In Memory)</h3>
+  <table>
+    <tr>
+      <th>Patient ID</th>
+      <th>Patient Name</th>
+      <th>Visit Type</th>
+      <th>Last Visit Date</th>
+      <th>Last Visit Description</th>
+      <th>Medicine Prescribed</th>
+      <th>Lab Tests</th>
+      <th>X-Ray</th>
+      <th>Scan</th>
+      <th>Other Test</th>
+    </tr>
+    <tr *ngFor="let p of prescriptions">
+      <td>{{ p.patientId }}</td>
+      <td>{{ p.patientName }}</td>
+      <td>{{ p.visitType }}</td>
+      <td>{{ p.lastVisitDate }}</td>
+      <td>{{ p.lastVisitDescription }}</td>
+      <td>
+        <ul style="margin:0;padding-left:18px;">
+          <li *ngFor="let med of p.medicines">{{ med.name }}</li>
+        </ul>
+      </td>
+      <td>
+        <ul style="margin:0;padding-left:18px;">
+          <li *ngFor="let test of p.labTests">{{ test.name }}</li>
+        </ul>
+      </td>
+      <td>{{ p.xray }}</td>
+      <td>{{ p.scan }}</td>
+      <td>{{ p.otherTest }}</td>
+    </tr>
+  </table>
+</div>

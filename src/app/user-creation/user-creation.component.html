@@ -1,0 +1,71 @@
+<div id="formContainer">
+  <h2>User Creation</h2>
+  <form (ngSubmit)="onSave()" #userForm="ngForm" autocomplete="off">
+    <label for="username">Username:</label>
+    <input type="text" [(ngModel)]="user.username" name="username" id="username" required />
+
+    <label for="password">Password:</label>
+    <input type="password" [(ngModel)]="user.password" name="password" id="password" required />
+
+    <label for="name">Full Name:</label>
+    <input type="text" [(ngModel)]="user.name" name="name" id="name" required />
+
+    <label for="age">Age:</label>
+    <input type="number" [(ngModel)]="user.age" name="age" id="age" min="0" />
+
+    <label for="email">Email:</label>
+    <input type="email" [(ngModel)]="user.email" name="email" id="email" required />
+
+    <label for="phone">Phone:</label>
+    <input type="tel" [(ngModel)]="user.phone" name="phone" id="phone" required pattern="[0-9]{10,}" />
+
+    <label for="address">Address:</label>
+    <input type="text" [(ngModel)]="user.address" name="address" id="address" required />
+
+    <label for="jobType">Job Type:</label>
+    <select [(ngModel)]="user.jobType" name="jobType" id="jobType" required>
+      <option *ngFor="let j of jobTypes" [value]="j">{{ j }}</option>
+    </select>
+
+    <label for="description">Description:</label>
+    <textarea [(ngModel)]="user.description" name="description" id="description" rows="2"></textarea>
+
+    <label for="role">Role:</label>
+    <select [(ngModel)]="user.role" name="role" id="role" required>
+      <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+    </select>
+
+    <button type="submit">Create User</button>
+  </form>
+  <div class="success" *ngIf="successMsg">
+    User Created Successfully!
+  </div>
+</div>
+
+<div id="savedData" *ngIf="users.length > 0">
+  <h3>Users (In Memory)</h3>
+  <table>
+    <tr>
+      <th>Username</th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Address</th>
+      <th>Job Type</th>
+      <th>Description</th>
+      <th>Role</th>
+    </tr>
+    <tr *ngFor="let u of users">
+      <td>{{ u.username }}</td>
+      <td>{{ u.name }}</td>
+      <td>{{ u.age }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.phone }}</td>
+      <td>{{ u.address }}</td>
+      <td>{{ u.jobType }}</td>
+      <td>{{ u.description }}</td>
+      <td>{{ u.role }}</td>
+    </tr>
+  </table>
+</div>

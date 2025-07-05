@@ -1,0 +1,54 @@
+<div id="formContainer">
+  <h2>Patient Insurance Form</h2>
+  <form (ngSubmit)="onSave()" #insuranceForm="ngForm" autocomplete="off">
+    <label for="patientId">Patient ID:</label>
+    <input type="text" [(ngModel)]="insurance.patientId" name="patientId" id="patientId" required />
+
+    <label for="patientName">Patient Name:</label>
+    <input type="text" [(ngModel)]="insurance.patientName" name="patientName" id="patientName" required />
+
+    <label for="insuranceProvider">Insurance Provider:</label>
+    <input type="text" [(ngModel)]="insurance.insuranceProvider" name="insuranceProvider" id="insuranceProvider" required />
+
+    <label for="policyNumber">Policy Number:</label>
+    <input type="text" [(ngModel)]="insurance.policyNumber" name="policyNumber" id="policyNumber" required />
+
+    <label for="validFrom">Valid From:</label>
+    <input type="date" [(ngModel)]="insurance.validFrom" name="validFrom" id="validFrom" />
+
+    <label for="validTo">Valid To:</label>
+    <input type="date" [(ngModel)]="insurance.validTo" name="validTo" id="validTo" />
+
+    <label for="coverageDetails">Coverage Details:</label>
+    <textarea [(ngModel)]="insurance.coverageDetails" name="coverageDetails" id="coverageDetails" rows="2"></textarea>
+
+    <button type="submit">Save Insurance</button>
+  </form>
+  <div class="success" *ngIf="successMsg">
+    Insurance Saved Successfully!
+  </div>
+</div>
+
+<div id="savedData" *ngIf="insurances.length > 0">
+  <h3>Insurance Records (In Memory)</h3>
+  <table>
+    <tr>
+      <th>Patient ID</th>
+      <th>Patient Name</th>
+      <th>Provider</th>
+      <th>Policy Number</th>
+      <th>Valid From</th>
+      <th>Valid To</th>
+      <th>Coverage Details</th>
+    </tr>
+    <tr *ngFor="let i of insurances">
+      <td>{{ i.patientId }}</td>
+      <td>{{ i.patientName }}</td>
+      <td>{{ i.insuranceProvider }}</td>
+      <td>{{ i.policyNumber }}</td>
+      <td>{{ i.validFrom }}</td>
+      <td>{{ i.validTo }}</td>
+      <td>{{ i.coverageDetails }}</td>
+    </tr>
+  </table>
+</div>

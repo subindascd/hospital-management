@@ -1,0 +1,18 @@
+<div class="sidebar-layout">
+  <nav class="sidebar">
+    <div class="sidebar-logo">🏥<span>Hospital</span></div>
+    <ul class="sidebar-links">
+      <li><a routerLink="/patients" routerLinkActive="active"><span class="icon">👤</span> Patients</a></li>
+      <li><a routerLink="/doctors" routerLinkActive="active"><span class="icon">🩺</span> Doctors</a></li>
+      <li><a routerLink="/appointments" routerLinkActive="active"><span class="icon">📅</span> Appointments</a></li>
+      <li><a routerLink="/users" routerLinkActive="active"><span class="icon">🧑‍💼</span> Users</a></li>
+      <li><a routerLink="/prescriptions" routerLinkActive="active"><span class="icon">💊</span> Prescriptions</a></li>
+      <li><a routerLink="/pharmacy" routerLinkActive="active"><span class="icon">🏥</span> Pharmacy</a></li>
+      <li><a routerLink="/insurance" routerLinkActive="active"><span class="icon">🛡️</span> Insurance</a></li>
+      <li><a routerLink="/tests" routerLinkActive="active"><span class="icon">🧪</span> Tests</a></li>
+    </ul>
+  </nav>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,0 +1,36 @@
+<div id="formContainer">
+  <h2>Doctor Registration Form</h2>
+  <form (ngSubmit)="onSave()" #registrationForm="ngForm" autocomplete="off">
+    <div *ngFor="let field of formFields">
+      <label [for]="field.id">{{ field.label }}:</label>
+      <ng-container [ngSwitch]="field.type">
+        <select *ngSwitchCase="'select'" [(ngModel)]="$any(doctor)[field.id]" [name]="field.id" [id]="field.id" [required]="field.required">
+          <option *ngFor="let opt of field.options" [value]="opt">{{ opt === '' ? 'Select' : opt }}</option>
+        </select>
+        <input *ngSwitchDefault
+               [type]="field.type"
+               [(ngModel)]="$any(doctor)[field.id]"
+               [name]="field.id"
+               [id]="field.id"
+               [required]="field.required"
+               [pattern]="field.pattern || ''" />
+      </ng-container>
+    </div>
+    <button type="submit">Save</button>
+  </form>
+  <div class="success" *ngIf="successMsg">
+    Doctor Registered Successfully!
+  </div>
+</div>
+
+<div id="savedData" *ngIf="savedDoctors.length > 0">
+  <h3>Saved Doctors (In Memory)</h3>
+  <table>
+    <tr>
+      <th *ngFor="let field of formFields">{{ field.label }}</th>
+    </tr>
+    <tr *ngFor="let d of savedDoctors">
+      <td *ngFor="let field of formFields">{{ getDoctorFieldValue(d, field) }}</td>
+    </tr>
+  </table>
+</div>

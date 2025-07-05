@@ -1,0 +1,17 @@
+<div id="formContainer">
+  <h2>Pharmacy - Patient Medicine Lookup</h2>
+  <form (ngSubmit)="onSearch()" #pharmacyForm="ngForm" autocomplete="off">
+    <label for="patientId">Enter Patient ID:</label>
+    <input type="text" [(ngModel)]="searchPatientId" name="patientId" id="patientId" required />
+    <button type="submit">Search</button>
+  </form>
+  <div class="success" *ngIf="foundPrescription">
+    <h3>Prescription Details</h3>
+    <p><strong>Patient Name:</strong> {{ foundPrescription.patientName }}</p>
+    <p><strong>Doctor Name:</strong> {{ foundPrescription.doctorName }}</p>
+    <p><strong>Medicine Prescribed:</strong> {{ foundPrescription.medicinePrescribed }}</p>
+  </div>
+  <div class="error" *ngIf="notFound">
+    No prescription found for this Patient ID.
+  </div>
+</div>
